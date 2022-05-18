@@ -6,7 +6,7 @@ import base64
 
 from app.auth.schemas import UserSchema
 from app.auth.models import User
-from app import db
+from app import db, session
 
 class UserListApi(Resource):
 
@@ -27,8 +27,8 @@ class UserListApi(Resource):
                 email = json_data['email'],
                 password = base64.b64encode(json_data['password'].encode("ascii")).decode("ascii")
             )
-            db.session.add(new_user)
-            db.session.commit()
+            session.add(new_user)
+            session.commit()
             user_schema = UserSchema()
             return user_schema.dump(new_user)
         

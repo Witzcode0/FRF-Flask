@@ -5,6 +5,16 @@ from flask_admin import Admin
 from flask_restful import Api
 from flask_marshmallow import Marshmallow
 from flask_jwt_extended import JWTManager
+from sqlalchemy.orm import sessionmaker
+
+import datetime
+import sqlalchemy as db
+
+
+engine = db.create_engine('postgresql://postgres:1234@localhost/frf')
+
+Session = sessionmaker(bind=engine)
+session = Session()
 
 
 app = Flask(__name__)
@@ -21,6 +31,7 @@ api = Api(app)
 ma = Marshmallow(app)
 jwt = JWTManager(app)
 app.config["JWT_SECRET_KEY"] = "72ea0aebb42c45fd0d4e4c1fe162ca69" + "2c0928b4e03c0adb3a967623889d143fd593a1af"
+app.config['JWT_EXPIRATION_DELTA'] = datetime.timedelta(days=10) 
 
 from app.auth.models import User
 from app.post.models import Post
